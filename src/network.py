@@ -107,6 +107,9 @@ if __name__ == "__main__":
 
     pkts = [packet() for _ in range(randint(5, 10))]
     net = network()
-    print(*net.sendto(pkts), sep="\n")
-    print("-" * 50)
+    rpkts = net.sendto(pkts)
+    print("sent packets:")
     print(*pkts, sep="\n")
+    print("-" * 50)
+    print("received packets:")
+    print(*rpkts, sep="\n")
