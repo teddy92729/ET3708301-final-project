@@ -57,7 +57,7 @@ class network:
     def __init__(
         self,
         sender: host_port = host_port("127.0.0.1", 5405),
-        receiver: host_port = host_port("127.0.0.1", 5405),
+        receiver: host_port = host_port("127.0.0.1", 5404),
         timeout: int = 10,
     ):
         # network has dual socket for sending and receiving packets
@@ -68,7 +68,7 @@ class network:
         self.rsock.bind((self.receiver.host, self.receiver.port))
         self.rsock.settimeout(timeout)
 
-    def sendto(self, pkts: list[packet,]) -> list[int]:
+    def sendto(self, pkts: list[packet,], delay: int = 0) -> list[int]:
         # threading lock to prevent competition of rpkts
         lock = threading.Lock()
         # received packets
@@ -91,6 +91,7 @@ class network:
             for pkt in pkts:
                 data = packet.encode(pkt)
                 self.ssock.sendto(data, (self.sender.host, self.sender.port))
+                time.sleep(delay)
 
         threads = [threading.Thread(target=recive_packet) for _ in range(len(pkts))] + [
             threading.Thread(target=send_packets)
