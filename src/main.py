@@ -54,17 +54,16 @@ def window_sendto(nets: list[network], pkts: list[packet]):
                 j += 1
             else:
                 break
-
+        index += i
         if i == window:
             window = min(window * 2, len(pkts) - index)
         else:
-            window = base_window
-        index += i
+            window = min(base_window, len(pkts) - index)
 
 
 if __name__ == "__main__":
 
-    proxy(delay=0.5, loss=0.01)
+    proxy(delay=0.5, loss=0.1)
     proxy(receiver=host_port("127.0.0.1", 5406), delay=0.1, loss=0.1)
 
     pkts = [packet() for _ in range(1000)]
@@ -76,5 +75,6 @@ if __name__ == "__main__":
     )
     net2.rsock.close()
     net2.rsock = net1.rsock
+    net2.rlock = net1.rlock
     window_sendto([net1, net2], pkts)
     print("done")

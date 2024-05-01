@@ -71,26 +71,21 @@ class network:
         self.rsock: socket = socket(AF_INET, SOCK_DGRAM)
         self.rsock.bind((self.receiver.host, self.receiver.port))
         self.rsock.settimeout(timeout)
+        self.rlock = threading.Lock()
 
-    def sendto(self, pkts: list[packet,], delay: int = 0) -> list[packet,]:
-        # threading lock to prevent competition of rpkts
-        rpkts_lock = threading.Lock()
+    def sendto(self, pkts: list[packet,]) -> list[packet,]:
         # received packets
         rpkts: list[packet,] = []
-
-        recv_lock = threading.Lock()
-        send_lock = threading.Lock()
 
         # function to recive packet
         def recive_packet():
             try:
-                with recv_lock:
-                    data, _ = self.rsock.recvfrom(65535)
-                    data = packet.decode(data)
-                    if data is None:
-                        return False
-                    with rpkts_lock:
-                        rpkts.append(data)
+                for _ in pkts:
+                    with self.rlock:
+                        data, _ = self.rsock.recvfrom(65535)
+                        data = packet.decode(data)
+                        if data is not None:
+                            rpkts.append(data)
             except:
                 pass
 
@@ -98,25 +93,20 @@ class network:
         def send_packets():
             for pkt in pkts:
                 data = packet.encode(pkt)
-                with send_lock:
-                    self.ssock.sendto(data, (self.sender.host, self.sender.port))
-                time.sleep(delay)
+                self.ssock.sendto(data, (self.sender.host, self.sender.port))
 
-        threads = [threading.Thread(target=recive_packet) for _ in range(len(pkts))] + [
-            threading.Thread(target=send_packets)
-        ]
-        for thread in threads:
-            thread.start()
-        for thread in threads:
-            thread.join()
+        thread = threading.Thread(target=recive_packet)
+        thread.start()
+        send_packets()
+        thread.join()
         return rpkts
 
 
 if __name__ == "__main__":
-    from random import randint
 
-    pkts = [packet() for _ in range(randint(5, 10))]
-    net = network()
+    pkts = [packet() for _ in range(10)]
+    net = network(receiver=host_port("127.0.0.1", 5405), timeout=2)
+    print("beginning")
     rpkts = net.sendto(pkts)
     print("sent packets:")
     print(*pkts, sep="\n")
