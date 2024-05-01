@@ -8,6 +8,8 @@ class proxy:
         sender: host_port = host_port("127.0.0.1", 5404),
         receiver: host_port = host_port("127.0.0.1", 5405),
         timeout: int = 10,
+        delay: float = 0.1,
+        loss: float = 0.1,
     ):
         self.sender: host_port = sender
         self.receiver: host_port = receiver
@@ -15,12 +17,15 @@ class proxy:
         self.rsock: socket = socket(AF_INET, SOCK_DGRAM)
         self.rsock.bind((self.receiver.host, self.receiver.port))
         self.rsock.settimeout(timeout)
+        self.delay = delay
+        self.loss = loss
 
-        def delay_sendto(data: bytes, delay: float = 0.1, loss: float = 0.1):
-            if random.randint(0, 100) < loss * 100:
+        def delay_sendto(data: bytes):
+            nonlocal self
+            if random.randint(0, 100) < self.loss * 100:
                 return
-            if random.randint(0, 100) < delay * 100:
-                time.sleep(0.01)  # 10ms
+            if random.randint(0, 100) < self.delay * 100:
+                time.sleep(0.5)
             self.ssock.sendto(data, (self.sender.host, self.sender.port))
 
         def proxy_thread():

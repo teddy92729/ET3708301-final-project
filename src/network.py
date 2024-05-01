@@ -29,6 +29,10 @@ class packet:
         # define string representation of packet
         return f"Packet {self.packet_num} sended at t = {self.time:.5f}"
 
+    def __eq__(self, value: packet) -> bool:
+        # define equality of packets
+        return self.packet_num == value.packet_num and self.time == value.time
+
     @staticmethod
     def encode(pkt: packet) -> bytes:
         # record time and encode packet to bytes
@@ -68,21 +72,25 @@ class network:
         self.rsock.bind((self.receiver.host, self.receiver.port))
         self.rsock.settimeout(timeout)
 
-    def sendto(self, pkts: list[packet,], delay: int = 0) -> list[int]:
+    def sendto(self, pkts: list[packet,], delay: int = 0) -> list[packet,]:
         # threading lock to prevent competition of rpkts
-        lock = threading.Lock()
+        rpkts_lock = threading.Lock()
         # received packets
         rpkts: list[packet,] = []
+
+        recv_lock = threading.Lock()
+        send_lock = threading.Lock()
 
         # function to recive packet
         def recive_packet():
             try:
-                data, _ = self.rsock.recvfrom(65535)
-                data = packet.decode(data)
-                if data is None:
-                    return False
-                with lock:
-                    rpkts.append(data)
+                with recv_lock:
+                    data, _ = self.rsock.recvfrom(65535)
+                    data = packet.decode(data)
+                    if data is None:
+                        return False
+                    with rpkts_lock:
+                        rpkts.append(data)
             except:
                 pass
 
@@ -90,7 +98,8 @@ class network:
         def send_packets():
             for pkt in pkts:
                 data = packet.encode(pkt)
-                self.ssock.sendto(data, (self.sender.host, self.sender.port))
+                with send_lock:
+                    self.ssock.sendto(data, (self.sender.host, self.sender.port))
                 time.sleep(delay)
 
         threads = [threading.Thread(target=recive_packet) for _ in range(len(pkts))] + [
