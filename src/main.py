@@ -62,19 +62,17 @@ def window_sendto(nets: list[network], pkts: list[packet]):
 
 
 if __name__ == "__main__":
+    server = host_port("127.0.0.1", 5404)
+    client = host_port("127.0.0.1", 5406)
+    proxy1 = host_port("127.0.0.1", 5405)
+    proxy2 = host_port("127.0.0.1", 10001)
 
-    proxy(delay=0.5, loss=0.1)
-    proxy(receiver=host_port("127.0.0.1", 5406), delay=0.1, loss=0.1)
+    proxy(server, proxy1, loss=0.1)
+    proxy(server, proxy2, loss=0.1)
 
     pkts = [packet() for _ in range(1000)]
-    net1 = network(timeout=2)
-    net2 = network(
-        sender=host_port("127.0.0.1", 5406),
-        receiver=host_port("127.0.0.1", 5407),
-        timeout=2,
-    )
-    net2.rsock.close()
-    net2.rsock = net1.rsock
-    net2.rlock = net1.rlock
+    net1 = network(proxy1, server, timeout=2)
+    net2 = network(proxy2, server, timeout=2)
+
     window_sendto([net1, net2], pkts)
     print("done")

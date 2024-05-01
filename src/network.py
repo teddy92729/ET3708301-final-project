@@ -55,21 +55,38 @@ class host_port:
     def __init__(self, host: str, port: int):
         self.host: str = host
         self.port: int = port
+        if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", host) is None:
+            raise ValueError("Invalid host address")
+        if port < 0 or port > 65535:
+            raise ValueError("Invalid port number")
+
+    def __str__(self) -> str:
+        return f"{self.host}:{self.port}"
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 class network:
+    receiver_list: dict[host_port, socket] = {}
+
     def __init__(
         self,
-        sender: host_port = host_port("127.0.0.1", 5405),
-        receiver: host_port = host_port("127.0.0.1", 5404),
+        sender: host_port,
+        receiver: host_port,
         timeout: int = 10,
     ):
         # network has dual socket for sending and receiving packets
         self.sender: host_port = sender
         self.receiver: host_port = receiver
         self.ssock: socket = socket(AF_INET, SOCK_DGRAM)
-        self.rsock: socket = socket(AF_INET, SOCK_DGRAM)
-        self.rsock.bind((self.receiver.host, self.receiver.port))
+
+        self.rsock = network.receiver_list.get(receiver)
+        if self.rsock is None:
+            self.rsock: socket = socket(AF_INET, SOCK_DGRAM)
+            self.rsock.bind((self.receiver.host, self.receiver.port))
+            network.receiver_list[receiver] = self.rsock
+
         self.rsock.settimeout(timeout)
         self.rlock = threading.Lock()
 
@@ -103,13 +120,13 @@ class network:
 
 
 if __name__ == "__main__":
-
     pkts = [packet() for _ in range(10)]
-    net = network(receiver=host_port("127.0.0.1", 5405), timeout=2)
-    print("beginning")
+    server = host_port("127.0.0.1", 5405)
+    net = network(server, server, timeout=2)
     rpkts = net.sendto(pkts)
     print("sent packets:")
     print(*pkts, sep="\n")
     print("-" * 50)
     print("received packets:")
     print(*rpkts, sep="\n")
+    print("done")

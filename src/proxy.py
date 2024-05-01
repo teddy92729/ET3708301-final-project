@@ -5,10 +5,10 @@ import random
 class proxy:
     def __init__(
         self,
-        sender: host_port = host_port("127.0.0.1", 5404),
-        receiver: host_port = host_port("127.0.0.1", 5405),
+        sender: host_port,
+        receiver: host_port,
         timeout: int = 10,
-        delay: float = 0.1,
+        delay: tuple[float] = (0.1, 0.5),
         loss: float = 0.1,
     ):
         self.sender: host_port = sender
@@ -24,8 +24,8 @@ class proxy:
             nonlocal self
             if random.randint(0, 100) < self.loss * 100:
                 return
-            if random.randint(0, 100) < self.delay * 100:
-                time.sleep(0.5)
+            if random.randint(0, 100) < self.delay[0] * 100:
+                time.sleep(delay[1])
             self.ssock.sendto(data, (self.sender.host, self.sender.port))
 
         def proxy_thread():
@@ -41,13 +41,12 @@ class proxy:
 
 
 if __name__ == "__main__":
-
-    from random import randint
-
-    proxy()
-    pkts = [packet() for _ in range(randint(5, 10))]
-    net = network(timeout=2)
-    rpkts = net.sendto(pkts, delay=0.1)
+    server = host_port("localhost", 5405)
+    client = host_port("localhost", 5406)
+    proxy(client, server, loss=0.1)
+    pkts = [packet() for _ in range(10)]
+    net = network(server, client, timeout=2)
+    rpkts = net.sendto(pkts)
     print("sent packets:")
     print(*pkts, sep="\n")
     print("-" * 50)
