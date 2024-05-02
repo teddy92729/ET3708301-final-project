@@ -8,16 +8,17 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
         skt.bind(tuple(source))
         skt.settimeout(timeout)
         print(f"Server started at {source}")
-        buffer = {}
+        recv = set()
         while True:
             try:
                 data = skt.recv(65535)
-                pkt = Packet.decode(data)
-                skt.sendto(Packet.encode(pkt), tuple(target))
-                if buffer.get(pkt.packet_num) is None:
+                pkt: Packet = Packet.decode(data)
+                if pkt not in recv:
                     now = time()
-                    buffer[pkt.packet_num] = now
-                    print(f"Received packet at {now}: {pkt}")
+                    recv.add(pkt)
+                    print(f"Received packet {now-pkt.time:.5f}: <{pkt}>")
+
+                skt.sendto(Packet.encode(pkt), tuple(target))
             except TimeoutError:
                 pass
 

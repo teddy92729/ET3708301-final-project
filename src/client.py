@@ -17,9 +17,10 @@ def client(
         while index < len(pkts):
             bound_window = min(window, len(pkts) - index)
             ready_pkts = pkts[index : index + bound_window]
+            print("*" * 50)
             for pkt in ready_pkts:
                 skt.sendto(Packet.encode(pkt), tuple(target))
-                print(f"Sent packet: {pkt}")
+                print(f"Sent packet: <{pkt}>")
             recv = set()
             try:
                 while True:
@@ -52,4 +53,6 @@ if __name__ == "__main__":
     parser.add_argument("--timeout", type=int, default=2, help="Timeout")
     args = parser.parse_args()
 
-    client(args.source, args.target, [Packet() for _ in args.pkts_num], args.timeout)
+    client(
+        args.source, args.target, [Packet() for _ in range(args.pkts_num)], args.timeout
+    )

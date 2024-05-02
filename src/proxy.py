@@ -2,6 +2,7 @@ from socket import socket, AF_INET, SOCK_DGRAM
 from utils import Address, Packet
 from threading import Thread
 from random import uniform
+from time import sleep
 
 
 def proxy(
@@ -13,25 +14,26 @@ def proxy(
     with socket(AF_INET, SOCK_DGRAM) as skt:
         skt.bind((source.host, source.port))
         print(f"Proxy server started at {source}")
+
+        def delay_sendto(data: bytes) -> None:
+            sleep(delay[1])
+            skt.sendto(data, tuple(target))
+
         while True:
             try:
                 data, _ = skt.recvfrom(65535)
-                pkt = Packet.decode(data)
-                print(f"Decoded packet: {pkt}")
                 if uniform(0, 1) < loss:
-                    print(f"Packet {pkt} lost")
+                    print(f"Packet <{data}> lost")
                     continue
                 if uniform(0, 1) < delay[1]:
-                    delay_time = uniform(*delay)
-                    print(f"Delaying packet {pkt} for {delay_time:.5f} seconds")
+                    print(f"Delaying packet <{data}> for {delay[1]:.5f} seconds")
                     Thread(
-                        target=lambda: skt.sendto(data, tuple(target)),
-                        args=(),
+                        target=delay_sendto,
+                        args=(data,),
                         daemon=True,
                     ).start()
                     continue
                 skt.sendto(data, tuple(target))
-                print(f"Sent packet to {target}")
             except TimeoutError:
                 pass
 
@@ -51,6 +53,5 @@ if __name__ == "__main__":
     )
     parser.add_argument("--loss", type=float, default=0, help="Loss probability")
     args = parser.parse_args()
-    source = Address(args.source_host, args.source_port)
-    target = Address(args.target_host, args.target_port)
-    proxy(source, target, args.delay, args.loss)
+
+    proxy(args.source, args.target, args.delay, args.loss)

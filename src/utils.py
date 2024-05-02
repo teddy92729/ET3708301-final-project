@@ -78,7 +78,7 @@ class Address:
         return str(self)
 
     def __iter__(self) -> tuple[str, int]:
-        return (self.host, self.port)
+        return (self.host, self.port).__iter__()
 
 
 if __name__ == "__main__":
