@@ -9,7 +9,10 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
         skt.settimeout(timeout)
         print(f"Client started at {source}")
 
-        window = 16
+        base_window = 4
+        window = base_window
+        threshold = 16
+
         index = 0
         # pkts.sort(key=lambda x: x.packet_num)
         while index < len(pkts):
@@ -32,6 +35,13 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                 for pkt in recv:
                     if pkt == pkts[index + increment]:
                         increment += 1
+                if increment == len(recv):
+                    if window <= threshold:
+                        window *= 2
+                    else:
+                        window += 1
+                else:
+                    window = base_window
                 index += increment
 
 
