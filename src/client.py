@@ -1,11 +1,9 @@
 from socket import socket, AF_INET, SOCK_DGRAM
 from utils import Address, Packet
-from time import time
 
 
-def client(
-    source: Address, target: Address, pkts: list[Packet], timeout: int = 2
-) -> None:
+def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -> None:
+    pkts = [Packet() for _ in range(pkts_nums)]
     with socket(AF_INET, SOCK_DGRAM) as skt:
         skt.bind(tuple(source))
         skt.settimeout(timeout)
@@ -53,6 +51,4 @@ if __name__ == "__main__":
     parser.add_argument("--timeout", type=int, default=2, help="Timeout")
     args = parser.parse_args()
 
-    client(
-        args.source, args.target, [Packet() for _ in range(args.pkts_num)], args.timeout
-    )
+    client(args.source, args.target, args.pkts_num, args.timeout)

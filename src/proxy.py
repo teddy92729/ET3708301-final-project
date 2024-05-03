@@ -1,5 +1,5 @@
 from socket import socket, AF_INET, SOCK_DGRAM
-from utils import Address, Packet
+from utils import Address
 from threading import Thread
 from random import uniform
 from time import sleep

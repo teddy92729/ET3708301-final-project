@@ -1,7 +1,6 @@
 import time
 import re
-from typing import overload, TypeVar, Generator
-from socket import socket
+from typing import TypeVar
 
 _Packet = TypeVar("_Packet", bound="Packet")
 
@@ -57,12 +56,29 @@ class Packet:
 
 class Address:
     def __init__(self, host: str, port: int):
-        self.host: str = host
-        self.port: int = port
-        if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", host) is None:
+        self.__host: str = host
+        self.__port: int = port
+        if re.match(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", self.__host) is None:
             raise ValueError("Invalid host address")
-        if port < 0 or port > 65535:
+        if self.__port < 0 or self.__port > 65535:
             raise ValueError("Invalid port number")
+
+    @property
+    def host(self) -> str:
+        return self.__host
+
+    @property
+    def port(self) -> int:
+        return self.__port
+
+    def __str__(self) -> str:
+        return f"{self.__host}:{self.__port}"
+
+    def __repr__(self) -> str:
+        return str(self)
+
+    def __iter__(self) -> tuple[str, int]:
+        return (self.__host, self.__port).__iter__()
 
     @staticmethod
     def parse(address: str) -> "Address":
@@ -70,15 +86,6 @@ class Address:
             r"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d+)$", address
         ).groups()
         return Address(host, int(port))
-
-    def __str__(self) -> str:
-        return f"{self.host}:{self.port}"
-
-    def __repr__(self) -> str:
-        return str(self)
-
-    def __iter__(self) -> tuple[str, int]:
-        return (self.host, self.port).__iter__()
 
 
 if __name__ == "__main__":
