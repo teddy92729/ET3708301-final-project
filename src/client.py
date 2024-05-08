@@ -1,5 +1,5 @@
 from socket import socket, AF_INET, SOCK_DGRAM
-from utils import Address, Packet
+from utils import Address, Packet, Timer
 from time import time
 
 
@@ -15,6 +15,7 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
         window = base_window
         threshold = 16
 
+        timer = Timer()
         # index of first packet in this batch
         index = 0
         while index < len(pkts):
@@ -34,8 +35,9 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                     data = skt.recv(65535)
                     last_ack = pkt
                     pkt: Packet = Packet.decode(data)
-                    if last_ack and pkt != last_ack:
-                        print(f"Received rtt {time()-pkt.time:.5f}: <{pkt}>")
+                    # if last_ack and pkt != last_ack:
+                    #     print(f"Received rtt {time()-pkt.time:.5f}: <{pkt}>")
+
                     # ack packet is equal to last packet in ready_pkts
                     # all packets are received
                     if pkt.packet_num == ready_pkts[-1].packet_num:
@@ -45,11 +47,25 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                         else:
                             window += 1
                         break
+                    else:
+                        skt.sendto(
+                            Packet.encode(
+                                ready_pkts[
+                                    max(
+                                        pkt.packet_num - ready_pkts[0].packet_num + 1, 0
+                                    )
+                                ]
+                            ),
+                            tuple(target),
+                        )
             except TimeoutError:
                 if pkt:  # check last ack packet
                     index += max(pkt.packet_num - ready_pkts[0].packet_num + 1, 0)
                 window = base_window
                 print("restored window")
+        t = timer()
+        print(f"Total time: {t:.5f}")
+        print(f"rtt: {t/pkts_nums:.5f}")
 
 
 if __name__ == "__main__":
