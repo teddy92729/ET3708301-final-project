@@ -16,13 +16,11 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
             try:
                 data = skt.recv(65535)
                 pkt: Packet = Packet.decode(data)
-                recv[pkt.packet_num] = pkt
+                recv[pkt.packet_num] = data
                 # find max contiguos packet number
                 while (cont + 1) in recv:
                     cont += 1
-                    pkt = recv[cont]
-                    # Propagation delay time
-                    print(f"Received packet {cont}")
+                    print(f"Received packet <{Packet.decode(recv[cont])}>")
                 # send ack to client
                 skt.sendto(recv[cont], tuple(target))
             except TimeoutError:
