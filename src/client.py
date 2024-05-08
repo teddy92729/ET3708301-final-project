@@ -29,20 +29,18 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                     pkt = Packet.decode(data)
                     recv.add(pkt)
             except TimeoutError:
-                recv = list(recv)
-                recv.sort(key=lambda x: x.packet_num)
-                increment = 0
-                for pkt in recv:
-                    if pkt == pkts[index + increment]:
-                        increment += 1
-                if increment == len(recv):
-                    if window <= threshold:
+                recv = sorted(recv, key=lambda x: x.packet_num)
+                if recv:
+                    index += max(recv[-1].packet_num - ready_pkts[0].packet_num + 1, 0)
+                    print(f"Received max ack: <{recv[-1]}>")
+                if recv and recv[-1] == ready_pkts[-1]:
+                    if window < threshold:
                         window *= 2
                     else:
                         window += 1
                 else:
                     window = base_window
-                index += increment
+                    print("restored window")
 
 
 if __name__ == "__main__":
