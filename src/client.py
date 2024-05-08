@@ -1,5 +1,6 @@
 from socket import socket, AF_INET, SOCK_DGRAM
 from utils import Address, Packet
+from time import time
 
 
 def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -> None:
@@ -25,14 +26,20 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
             for pkt in ready_pkts:
                 skt.sendto(Packet.encode(pkt), tuple(target))
                 print(f"Sent packet: <{pkt}>")
+
+            last_ack = None
             pkt = None
             try:
                 while True:
                     data = skt.recv(65535)
+                    last_ack = pkt
                     pkt: Packet = Packet.decode(data)
+                    if last_ack and pkt != last_ack:
+                        print(f"rtt: {time()-pkt.time:.5f}")
                     # ack packet is equal to last packet in ready_pkts
                     # all packets are received
                     if pkt.packet_num == ready_pkts[-1].packet_num:
+                        print(f"rtt: {time()-pkt.time:.5f}")
                         index += bound_window
                         if window < threshold:
                             window *= 2
