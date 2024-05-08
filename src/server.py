@@ -9,19 +9,20 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
         skt.settimeout(timeout)
         print(f"Server started at {source}")
         # recived packets buffer
-        recv = set()
+        recv: dict[int, Packet] = dict()
         # max contiguos packet number
         cont = 0
         while True:
             try:
                 data = skt.recv(65535)
                 pkt: Packet = Packet.decode(data)
-                if pkt not in recv:
-                    recv.add(pkt)
+                recv[pkt.packet_num] = pkt, time()
                 # find max contiguos packet number
-                while Packet([cont + 1, -1]) in recv:
+                while (cont + 1) in recv:
                     cont += 1
-                    print(f"Received packet {cont}")
+                    pkt, t = recv[cont]
+                    # Propagation delay time
+                    print(f"Received packet {cont}: pt = {t-pkt.time:.5f} sec")
                 # send ack to client
                 skt.sendto(Packet.encode(Packet([cont, -1])), tuple(target))
             except TimeoutError:
