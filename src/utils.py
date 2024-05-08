@@ -1,4 +1,4 @@
-import time
+from time import time
 import re
 from typing import TypeVar
 
@@ -43,7 +43,7 @@ class Packet:
     @staticmethod
     def encode(pkt: _Packet) -> bytes:
         # record time and encode packet to bytes
-        pkt.__time = time.time()
+        pkt.__time = time()
         return str(pkt).encode()
 
     @staticmethod
@@ -90,6 +90,17 @@ class Address:
             r"^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}):(\d+)$", address
         ).groups()
         return Address(host, int(port))
+
+
+class Timer:
+    def __init__(self) -> None:
+        self.__start_time: float = time()
+
+    def __call__(self) -> float:
+        return time() - self.__start_time
+
+    def reset(self) -> None:
+        self.__start_time = time()
 
 
 if __name__ == "__main__":
