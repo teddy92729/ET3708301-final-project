@@ -25,6 +25,10 @@ class Packet:
     def time(self) -> float:
         return self.__time
 
+    @time.setter
+    def time(self, value: float) -> None:
+        self.__time = value
+
     def __str__(self) -> str:
         # define string representation of packet
         return f"Packet {self.__packet_num} sended at t = {self.__time:.5f}"
