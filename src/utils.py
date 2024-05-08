@@ -47,7 +47,7 @@ class Packet:
         # decode packet from bytes and try to parse with regex
         # if parsing fails return None
         data = data.decode()
-        data = re.search(r"^Packet (\d+) sended at t = (\d+.\d+)$", data).groups()
+        data = re.search(r"^Packet (\d+) sended at t = (\d+\.\d+)$", data).groups()
         try:
             return Packet((int(data[0]), float(data[1])))
         except:
