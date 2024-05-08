@@ -35,11 +35,10 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                     last_ack = pkt
                     pkt: Packet = Packet.decode(data)
                     if last_ack and pkt != last_ack:
-                        print(f"rtt: {time()-pkt.time:.5f}")
+                        print(f"Received rtt {time()-pkt.time:.5f}: <{pkt}>")
                     # ack packet is equal to last packet in ready_pkts
                     # all packets are received
                     if pkt.packet_num == ready_pkts[-1].packet_num:
-                        print(f"rtt: {time()-pkt.time:.5f}")
                         index += bound_window
                         if window < threshold:
                             window *= 2
