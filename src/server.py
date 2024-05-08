@@ -8,7 +8,9 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
         skt.bind(tuple(source))
         skt.settimeout(timeout)
         print(f"Server started at {source}")
+        # recived packets buffer
         recv = set()
+        # max contiguos packet number
         cont = 0
         while True:
             try:
@@ -18,8 +20,10 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
                     now = time()
                     recv.add(pkt)
                     print(f"Received packet {now-pkt.time:.5f}: <{pkt}>")
+                # find max contiguos packet number
                 while Packet([cont + 1, -1]) in recv:
                     cont += 1
+                # send ack to client
                 skt.sendto(Packet.encode(Packet([cont, -1])), tuple(target))
             except TimeoutError:
                 pass

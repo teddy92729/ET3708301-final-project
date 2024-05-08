@@ -9,19 +9,23 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
         skt.settimeout(timeout)
         print(f"Client started at {source}")
 
+        # window size and threshold for congestion control
         base_window = 4
         window = base_window
         threshold = 16
 
+        # index of first packet in this batch
         index = 0
-        # pkts.sort(key=lambda x: x.packet_num)
         while index < len(pkts):
+            # prevent out of bounds
             bound_window = min(window, len(pkts) - index)
+            # get packets that will be sent
             ready_pkts = pkts[index : index + bound_window]
             print("*" * 50)
             for pkt in ready_pkts:
                 skt.sendto(Packet.encode(pkt), tuple(target))
                 print(f"Sent packet: <{pkt}>")
+            # receive acks
             recv = set()
             try:
                 while True:
@@ -29,10 +33,15 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                     pkt = Packet.decode(data)
                     recv.add(pkt)
             except TimeoutError:
+                # sort received packets by packet number
                 recv = sorted(recv, key=lambda x: x.packet_num)
                 if recv:
+                    # update index to the next packet
+                    # if recv packet is greater than the last packet in ready_pkts
+                    # then this batch is invalid
                     index += max(recv[-1].packet_num - ready_pkts[0].packet_num + 1, 0)
                     print(f"Received max ack: <{recv[-1]}>")
+                # congestion control
                 if recv and recv[-1] == ready_pkts[-1]:
                     if window < threshold:
                         window *= 2
