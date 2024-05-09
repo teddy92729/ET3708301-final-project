@@ -3,6 +3,7 @@ from utils import Address
 from threading import Thread
 from random import uniform
 from time import sleep
+import logging
 
 
 def proxy(
@@ -13,7 +14,7 @@ def proxy(
 ) -> None:
     with socket(AF_INET, SOCK_DGRAM) as skt:
         skt.bind((source.host, source.port))
-        print(f"Proxy server started at {source}")
+        logging.info(f"Proxy server started at {source}")
 
         def delay_sendto(data: bytes) -> None:
             sleep(delay[1])
@@ -23,10 +24,12 @@ def proxy(
             try:
                 data, _ = skt.recvfrom(65535)
                 if uniform(0, 1) < loss:
-                    print(f"Packet <{data}> lost")
+                    logging.debug(f"Packet <{data}> lost")
                     continue
                 if uniform(0, 1) < delay[1]:
-                    print(f"Delaying packet <{data}> for {delay[1]:.5f} seconds")
+                    logging.debug(
+                        f"Delaying packet <{data}> for {delay[1]:.5f} seconds"
+                    )
                     Thread(
                         target=delay_sendto,
                         args=(data,),
@@ -52,6 +55,12 @@ if __name__ == "__main__":
         "--delay", type=float, nargs=2, default=[0, 0], help="Delay (range, seconds)"
     )
     parser.add_argument("--loss", type=float, default=0, help="Loss probability")
+    parser.add_argument("--verbose", action="store_true", help="Verbose mode")
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(message)s")
+    else:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
     proxy(args.source, args.target, args.delay, args.loss)

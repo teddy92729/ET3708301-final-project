@@ -1,6 +1,7 @@
 from socket import socket, AF_INET, SOCK_DGRAM
 from utils import Address, Packet, Timer
 from time import time
+import logging
 
 
 def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -> None:
@@ -8,12 +9,10 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
     with socket(AF_INET, SOCK_DGRAM) as skt:
         skt.bind(tuple(source))
         skt.settimeout(timeout)
-        print(f"Client started at {source}")
+        logging.info(f"Client started at {source}")
 
         # window size and threshold for congestion control
-        base_window = 4
-        window = base_window
-        threshold = 16
+        window = 16
 
         total_sent = 0
 
@@ -25,11 +24,11 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
             bound_window = min(window, len(pkts) - index)
             # get packets that will be sent
             ready_pkts = pkts[index : index + bound_window]
-            print("*" * 50)
+            logging.debug("*" * 50)
             for pkt in ready_pkts:
                 total_sent += 1
                 skt.sendto(Packet.encode(pkt), tuple(target))
-                print(f"Sent packet: <{pkt}>")
+                logging.debug(f"Sent packet: <{pkt}>")
 
             last_ack = None
             pkt = None
@@ -45,10 +44,6 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                     # all packets are received
                     if pkt.packet_num == ready_pkts[-1].packet_num:
                         index += bound_window
-                        if window < threshold:
-                            window *= 2
-                        else:
-                            window += 1
                         break
                     elif last_ack and pkt.packet_num == last_ack.packet_num:
                         total_sent += 1
@@ -65,12 +60,10 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
             except TimeoutError:
                 if pkt:  # check last ack packet
                     index += max(pkt.packet_num - ready_pkts[0].packet_num + 1, 0)
-                window = base_window
-                print("restored window")
         t = timer()
-        print(f"Total time: {t:.5f} sec")
-        print(f"rtt: {t/pkts_nums:.5f} sec")
-        print(
+        logging.info(f"Total time: {t:.5f} sec")
+        logging.info(f"rtt: {t/pkts_nums:.5f} sec")
+        logging.info(
             f"Packets resent rate: {(total_sent - pkts_nums) / pkts_nums * 100:.5f} %"
         )
 
@@ -89,6 +82,12 @@ if __name__ == "__main__":
         "--pkts_num", type=int, default=1000, help="Number of packets to send"
     )
     parser.add_argument("--timeout", type=int, default=2, help="Timeout")
+    parser.add_argument("--verbose", action="store_true", help="Verbose mode")
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(message)s")
+    else:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
     client(args.source, args.target, args.pkts_num, args.timeout)

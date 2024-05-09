@@ -1,13 +1,14 @@
 from socket import socket, AF_INET, SOCK_DGRAM
 from utils import Address, Packet
 from time import time
+import logging
 
 
 def server(source: Address, target: Address, timeout: int = 2) -> None:
     with socket(AF_INET, SOCK_DGRAM) as skt:
         skt.bind(tuple(source))
         skt.settimeout(timeout)
-        print(f"Server started at {source}")
+        logging.info(f"Server started at {source}")
         # recived packets buffer
         recv: dict[int, Packet] = dict()
         # max contiguos packet number
@@ -20,7 +21,7 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
                 # find max contiguos packet number
                 while (cont + 1) in recv:
                     cont += 1
-                    print(f"Received packet <{Packet.decode(recv[cont])}>")
+                    logging.debug(f"Received packet <{Packet.decode(recv[cont])}>")
                 if cont:
                     # send ack to client
                     skt.sendto(recv[cont], tuple(target))
@@ -39,6 +40,12 @@ if __name__ == "__main__":
         "--target", type=Address.parse, required=True, help="Target host:port"
     )
     parser.add_argument("--timeout", type=int, default=2, help="Timeout")
+    parser.add_argument("--verbose", action="store_true", help="Verbose mode")
     args = parser.parse_args()
+
+    if args.verbose:
+        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(message)s")
+    else:
+        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
 
     server(args.source, args.target, args.timeout)
