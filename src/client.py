@@ -15,6 +15,8 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
         window = base_window
         threshold = 16
 
+        total_sent = 0
+
         timer = Timer()
         # index of first packet in this batch
         index = 0
@@ -25,6 +27,7 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
             ready_pkts = pkts[index : index + bound_window]
             print("*" * 50)
             for pkt in ready_pkts:
+                total_sent += 1
                 skt.sendto(Packet.encode(pkt), tuple(target))
                 print(f"Sent packet: <{pkt}>")
 
@@ -47,7 +50,8 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                         else:
                             window += 1
                         break
-                    else:
+                    elif last_ack and pkt.packet_num == last_ack.packet_num:
+                        total_sent += 1
                         skt.sendto(
                             Packet.encode(
                                 ready_pkts[
@@ -64,8 +68,11 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                 window = base_window
                 print("restored window")
         t = timer()
-        print(f"Total time: {t:.5f}")
-        print(f"rtt: {t/pkts_nums:.5f}")
+        print(f"Total time: {t:.5f} sec")
+        print(f"rtt: {t/pkts_nums:.5f} sec")
+        print(
+            f"Packets resent rate: {(total_sent - pkts_nums) / pkts_nums * 100:.5f} %"
+        )
 
 
 if __name__ == "__main__":
