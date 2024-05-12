@@ -11,7 +11,7 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
         skt.settimeout(timeout)
         logging.info(f"Client started at {source}")
 
-        # window size and threshold for congestion control
+        # window size
         window = 16
 
         total_sent = 0
@@ -30,36 +30,44 @@ def client(source: Address, target: Address, pkts_nums: int, timeout: int = 2) -
                 skt.sendto(Packet.encode(pkt), tuple(target))
                 logging.debug(f"Sent packet: <{pkt}>")
 
-            last_ack = None
+            counter = 0
+            last_pkt = None
             pkt = None
+            offset = 0
             try:
                 while True:
                     data = skt.recv(65535)
-                    last_ack = pkt
+                    last_pkt = pkt
                     pkt: Packet = Packet.decode(data)
-                    # if last_ack and pkt != last_ack:
-                    #     print(f"Received rtt {time()-pkt.time:.5f}: <{pkt}>")
+                    offset = pkt - ready_pkts[0]
+                    # ignore ack packets that are not in current window
+                    if offset < 0:
+                        continue
+                    logging.debug(f"Received ack: <{pkt}>")
 
                     # ack packet is equal to last packet in ready_pkts
                     # all packets are received
-                    if pkt.packet_num == ready_pkts[-1].packet_num:
+                    if offset == bound_window - 1:
                         index += bound_window
+                        logging.debug("Normally window move")
                         break
-                    elif last_ack and pkt.packet_num == last_ack.packet_num:
-                        total_sent += 1
-                        skt.sendto(
-                            Packet.encode(
-                                ready_pkts[
-                                    max(
-                                        pkt.packet_num - ready_pkts[0].packet_num + 1, 0
-                                    )
-                                ]
-                            ),
-                            tuple(target),
-                        )
+
+                    if last_pkt and last_pkt == pkt:
+                        counter += 1
+                    else:
+                        counter = 0
+
+                    # when we receive same ack packets
+                    # and the number of same ack packets is greater than half of remaining window size
+                    # we can move window to the next packet earlier
+                    if counter == max((window - offset) // 2, 2):
+                        index += offset + 1
+                        logging.debug("Early window move")
+                        break
             except TimeoutError:
-                if pkt:  # check last ack packet
-                    index += max(pkt.packet_num - ready_pkts[0].packet_num + 1, 0)
+                if pkt and offset >= 0:  # check last ack packet
+                    index += offset + 1
+                logging.debug("Timeout")
         t = timer()
         logging.info(f"Total time: {t:.5f} sec")
         logging.info(f"rtt: {t/pkts_nums:.5f} sec")
@@ -83,11 +91,22 @@ if __name__ == "__main__":
     )
     parser.add_argument("--timeout", type=int, default=2, help="Timeout")
     parser.add_argument("--verbose", action="store_true", help="Verbose mode")
+    parser.add_argument("--log", type=str, default="client.log", help="Log file")
     args = parser.parse_args()
 
     if args.verbose:
-        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(message)s")
+        logging.basicConfig(
+            filename=args.log,
+            filemode="w",
+            level=logging.DEBUG,
+            format="%(asctime)s - %(message)s",
+        )
     else:
-        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
+        logging.basicConfig(
+            filename=args.log,
+            filemode="w",
+            level=logging.INFO,
+            format="%(asctime)s - %(message)s",
+        )
 
     client(args.source, args.target, args.pkts_num, args.timeout)

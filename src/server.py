@@ -41,11 +41,22 @@ if __name__ == "__main__":
     )
     parser.add_argument("--timeout", type=int, default=2, help="Timeout")
     parser.add_argument("--verbose", action="store_true", help="Verbose mode")
+    parser.add_argument("--log", type=str, default="server.log", help="Log file")
     args = parser.parse_args()
 
     if args.verbose:
-        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(message)s")
+        logging.basicConfig(
+            filename=args.log,
+            filemode="w",
+            level=logging.DEBUG,
+            format="%(asctime)s - %(message)s",
+        )
     else:
-        logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(message)s")
+        logging.basicConfig(
+            filename=args.log,
+            filemode="w",
+            level=logging.INFO,
+            format="%(asctime)s - %(message)s",
+        )
 
     server(args.source, args.target, args.timeout)

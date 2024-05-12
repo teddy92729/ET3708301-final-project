@@ -40,6 +40,9 @@ class Packet:
     def __hash__(self) -> int:
         return self.packet_num
 
+    def __sub__(self, pkt: _Packet) -> int:
+        return self.__packet_num - pkt.__packet_num
+
     @staticmethod
     def encode(pkt: _Packet) -> bytes:
         # record time and encode packet to bytes
