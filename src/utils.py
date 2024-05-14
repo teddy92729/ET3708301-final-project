@@ -49,9 +49,10 @@ class Packet:
         return self.__packet_num - pkt.__packet_num
 
     @staticmethod
-    def encode(pkt: _Packet, id: int = -1) -> bytes:
+    def encode(pkt: _Packet, id: int = -1, update_time: bool = True) -> bytes:
         # record time and encode packet to bytes
-        pkt.__time = time()
+        if update_time:
+            pkt.__time = time()
         pkt.__id = id
         return str(pkt).encode()
 
