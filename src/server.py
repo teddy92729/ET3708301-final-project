@@ -17,7 +17,7 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
             try:
                 data = skt.recv(65535)
                 pkt: Packet = Packet.decode(data)
-                recv[pkt.packet_num] = pkt
+                recv[pkt.packet_num] = recv.get(pkt.packet_num, pkt)
                 # find max contiguos packet number
                 while (cont + 1) in recv:
                     cont += 1
