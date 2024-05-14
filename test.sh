@@ -4,11 +4,15 @@ sleep 1
 python3 src/proxy.py --source 127.0.0.1:5405 --target 127.0.0.1:5406 --delay 0.1 0.5 --loss 0.1 --verbose &
 proxy_pid=$!
 sleep 1
+python3 src/proxy.py --source 127.0.0.1:5404 --target 127.0.0.1:5403 --delay 0.1 0.5 --loss 0.1 --verbose --log proxy2.log&
+proxy2_pid=$!
+sleep 1
 
-trap "kill $server_pid; kill $proxy_pid" INT
+trap "kill $server_pid; kill $proxy_pid; kill $proxy2_pid" INT
 
-python3 src/client.py --source 127.0.0.1:5404 --target 127.0.0.1:5405 --verbose
+python3 src/client.py --source 127.0.0.1:5403 --target 127.0.0.1:5405 --verbose
 
 kill $server_pid
 kill $proxy_pid
+kill $proxy2_pid
 
