@@ -21,6 +21,8 @@ def client(
 
         batch = 0
         total_sent = 0
+        total_fast_retransmit = 0
+        total_timeout = 0
 
         timer = Timer()
         # index of first packet in this batch
@@ -40,7 +42,7 @@ def client(
             counter = 0
             last_pkt = None
             pkt = None
-            offset = 0
+            offset = -1
             try:
                 while True:
                     data = skt.recv(65535)
@@ -76,15 +78,19 @@ def client(
                     # we can move window to the next packet earlier
                     if fast_retransmit and counter >= fast_retransmit:
                         index += offset + 1
+                        total_fast_retransmit += 1
                         logging.debug(f"Window move {offset + 1}: fast retransmit")
                         break
             except TimeoutError:
-                if pkt and offset >= 0:  # check last ack packet
-                    index += offset + 1
+                index += offset + 1
+                total_timeout += 1
                 logging.debug(f"Window move {offset + 1}: timeout")
         t = timer()
         logging.info(f"Total time: {t:.5f} sec")
-        logging.info(f"rtt: {t/pkts_num:.5f} sec")
+        logging.info(f"Average RTT: {t/pkts_num:.5f} sec")
+        logging.info(f"Total packets sent: {total_sent}")
+        logging.info(f"Total fast retransmit: {total_fast_retransmit}")
+        logging.info(f"Total timeout: {total_timeout}")
         logging.info(
             f"Packets retransmit rate: {(total_sent - pkts_num) / pkts_num * 100:.5f} %"
         )
