@@ -44,13 +44,18 @@ def client(
             try:
                 while True:
                     data = skt.recv(65535)
-                    tmp: Packet = Packet.decode(data)
-                    offset = tmp - ready_pkts[0]
+                    tmp_pkt: Packet = Packet.decode(data)
+                    tmp_offset = tmp_pkt - ready_pkts[0]
                     # ignore ack packets that are not in current window
-                    if offset < -1 or tmp.id != batch or pkt and (tmp - pkt) < 0:
+                    if (
+                        tmp_offset < -1
+                        or tmp_pkt.id != batch
+                        or (pkt and (tmp_pkt - pkt) < 0)
+                    ):
                         continue
                     last_pkt = pkt
-                    pkt = tmp
+                    pkt = tmp_pkt
+                    offset = tmp_offset
                     logging.debug(f"Received ack: <{pkt}>")
 
                     # ack packet is equal to last packet in ready_pkts
