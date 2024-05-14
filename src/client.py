@@ -81,7 +81,7 @@ def client(
         logging.info(f"Total time: {t:.5f} sec")
         logging.info(f"rtt: {t/pkts_num:.5f} sec")
         logging.info(
-            f"Packets resent rate: {(total_sent - pkts_num) / pkts_num * 100:.5f} %"
+            f"Packets retransmit rate: {(total_sent - pkts_num) / pkts_num * 100:.5f} %"
         )
 
 
