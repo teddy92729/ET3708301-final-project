@@ -22,9 +22,8 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
                 while (cont + 1) in recv:
                     cont += 1
                     logging.debug(f"Received packet <{Packet.decode(recv[cont])}>")
-                if cont:
-                    # send ack to client
-                    skt.sendto(recv[cont], tuple(target))
+                # send ack to client
+                skt.sendto(recv[cont], tuple(target))
             except TimeoutError:
                 pass
 
