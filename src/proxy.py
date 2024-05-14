@@ -26,7 +26,7 @@ def proxy(
                 if uniform(0, 1) < loss:
                     logging.debug(f"Packet <{data}> lost")
                     continue
-                if uniform(0, 1) < delay[1]:
+                if uniform(0, 1) < delay[0]:
                     logging.debug(
                         f"Delaying packet <{data}> for {delay[1]:.5f} seconds"
                     )
