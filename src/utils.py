@@ -9,13 +9,14 @@ class Packet:
     # static variable to get total number of packets
     __packet_num: int = 0
 
-    def __init__(self, packet_data: tuple[int, float] | None = None) -> None:
+    def __init__(self, packet_data: tuple[int, float, int] | None = None) -> None:
         if packet_data is None:
             Packet.__packet_num += 1
             self.__packet_num: int = Packet.__packet_num
             self.__time: float = -1
+            self.__id = -1
         else:
-            self.__packet_num, self.__time = packet_data
+            self.__packet_num, self.__time, self.__id = packet_data
 
     @property
     def packet_num(self) -> int:
@@ -25,13 +26,17 @@ class Packet:
     def time(self) -> float:
         return self.__time
 
+    @property
+    def id(self) -> int:
+        return self.__id
+
     @time.setter
     def time(self, value: float) -> None:
         self.__time = value
 
     def __str__(self) -> str:
         # define string representation of packet
-        return f"Packet {self.__packet_num} sended at t = {self.__time:.5f}"
+        return f"Packet {self.__packet_num} sended at t = {self.__time:.5f} id = {self.__id}"
 
     def __eq__(self, value: _Packet) -> bool:
         # define equality of packets
@@ -44,19 +49,22 @@ class Packet:
         return self.__packet_num - pkt.__packet_num
 
     @staticmethod
-    def encode(pkt: _Packet) -> bytes:
+    def encode(pkt: _Packet, id: int = -1) -> bytes:
         # record time and encode packet to bytes
         pkt.__time = time()
+        pkt.__id = id
         return str(pkt).encode()
 
     @staticmethod
     def decode(data: bytes) -> _Packet:
-        # decode packet from bytes and try to parse with regex
-        # if parsing fails return None
-        data = data.decode()
-        data = re.search(r"^Packet (\d+) sended at t = (\d+\.\d+)$", data).groups()
         try:
-            return Packet((int(data[0]), float(data[1])))
+            # decode packet from bytes and try to parse with regex
+            # if parsing fails return None
+            data = data.decode()
+            data = re.search(
+                r"^Packet (\d+) sended at t = (-?\d+\.?\d*) id = (-?\d+)$", data
+            ).groups()
+            return Packet((int(data[0]), float(data[1]), int(data[2])))
         except:
             raise ValueError("Invalid packet data")
 

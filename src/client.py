@@ -34,7 +34,7 @@ def client(
             logging.debug(f"batch {batch}" + "*" * 50)
             for pkt in ready_pkts:
                 total_sent += 1
-                skt.sendto(Packet.encode(pkt), tuple(target))
+                skt.sendto(Packet.encode(pkt, batch), tuple(target))
                 logging.debug(f"Sent packet: <{pkt}>")
 
             counter = 0
@@ -44,12 +44,13 @@ def client(
             try:
                 while True:
                     data = skt.recv(65535)
-                    last_pkt = pkt
-                    pkt: Packet = Packet.decode(data)
-                    offset = pkt - ready_pkts[0]
+                    tmp: Packet = Packet.decode(data)
+                    offset = tmp - ready_pkts[0]
                     # ignore ack packets that are not in current window
-                    if offset < 0:
+                    if offset < -1 or tmp.id != batch or pkt and (tmp - pkt) < 0:
                         continue
+                    last_pkt = pkt
+                    pkt = tmp
                     logging.debug(f"Received ack: <{pkt}>")
 
                     # ack packet is equal to last packet in ready_pkts

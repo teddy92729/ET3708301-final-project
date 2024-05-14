@@ -10,20 +10,20 @@ def server(source: Address, target: Address, timeout: int = 2) -> None:
         skt.settimeout(timeout)
         logging.info(f"Server started at {source}")
         # recived packets buffer
-        recv: dict[int, Packet] = dict()
+        recv: dict[int, Packet] = {0: Packet((0, -1, -1))}
         # max contiguos packet number
         cont = 0
         while True:
             try:
                 data = skt.recv(65535)
                 pkt: Packet = Packet.decode(data)
-                recv[pkt.packet_num] = data
+                recv[pkt.packet_num] = pkt
                 # find max contiguos packet number
                 while (cont + 1) in recv:
                     cont += 1
-                    logging.debug(f"Received packet <{Packet.decode(recv[cont])}>")
+                    logging.debug(f"Received packet <{recv[cont]}>")
                 # send ack to client
-                skt.sendto(recv[cont], tuple(target))
+                skt.sendto(Packet.encode(recv[cont], pkt.id), tuple(target))
             except TimeoutError:
                 pass
 
