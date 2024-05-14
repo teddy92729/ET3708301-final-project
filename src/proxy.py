@@ -13,7 +13,7 @@ def proxy(
     loss: float = 0,
 ) -> None:
     with socket(AF_INET, SOCK_DGRAM) as skt:
-        skt.bind((source.host, source.port))
+        skt.bind(tuple(source))
         logging.info(f"Proxy server started at {source}")
 
         def delay_sendto(data: bytes) -> None:
