@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="mobile-web-app-capable" content="yes">
     <title>
-        Final Project (Preliminary) - HackMD
+        Final Project - HackMD
     </title>
     <link rel="icon" type="image/png" href="https://hackmd.io/favicon.png">
     <link rel="apple-touch-icon" href="https://hackmd.io/apple-touch-icon.png">
@@ -34,7 +34,7 @@
 </head>
 
 <body>
-    <div id="doc" class="markdown-body container-fluid comment-enabled" data-hard-breaks="true"><h1 id="Final-Project-Preliminary" data-id="Final-Project-Preliminary"><a class="anchor hidden-xs" href="#Final-Project-Preliminary" title="Final-Project-Preliminary"><span class="octicon octicon-link"></span></a><span>Final Project Preliminary</span></h1><h2 id="實驗動機" data-id="實驗動機"><a class="anchor hidden-xs" href="#實驗動機" title="實驗動機"><span class="octicon octicon-link"></span></a><span>實驗動機</span></h2><ul>
+    <div id="doc" class="markdown-body container-fluid comment-enabled" data-hard-breaks="true"><h1 id="Final-Project" data-id="Final-Project"><a class="anchor hidden-xs" href="#Final-Project" title="Final-Project"><span class="octicon octicon-link"></span></a><span>Final Project</span></h1><h2 id="實驗動機" data-id="實驗動機"><a class="anchor hidden-xs" href="#實驗動機" title="實驗動機"><span class="octicon octicon-link"></span></a><span>實驗動機</span></h2><ul>
 <li>
 <p><span>回顧 HW 5, 我們已經了解 unperfect transmission 發生的原因以及其對於傳輸結果的影響.</span></p>
 <blockquote>
@@ -45,20 +45,43 @@
 </blockquote>
 </li>
 <li>
-<p><span>Final Project:</span></p>
+<h4 id="由於如Video-Streaming等應用對-delay-和-loss-有較高的要求--但現實生活中的網路傳輸卻無法避免delay和loss的發生。因此，如何於存在delay和loss的網路中藉由傳輸機制來提升網路傳輸的效果，是這個Final-Project要探討的議題。" data-id="由於如Video-Streaming等應用對-delay-和-loss-有較高的要求--但現實生活中的網路傳輸卻無法避免delay和loss的發生。因此，如何於存在delay和loss的網路中藉由傳輸機制來提升網路傳輸的效果，是這個Final-Project要探討的議題。"><a class="anchor hidden-xs" href="#由於如Video-Streaming等應用對-delay-和-loss-有較高的要求--但現實生活中的網路傳輸卻無法避免delay和loss的發生。因此，如何於存在delay和loss的網路中藉由傳輸機制來提升網路傳輸的效果，是這個Final-Project要探討的議題。" title="由於如Video-Streaming等應用對-delay-和-loss-有較高的要求--但現實生活中的網路傳輸卻無法避免delay和loss的發生。因此，如何於存在delay和loss的網路中藉由傳輸機制來提升網路傳輸的效果，是這個Final-Project要探討的議題。"><span class="octicon octicon-link"></span></a><span>由於如Video Streaming等應用對 delay 和 loss 有較高的要求 , 但現實生活中的網路傳輸卻無法避免delay和loss的發生。因此，如何於存在delay和loss的網路中藉由傳輸機制來提升網路傳輸的效果，是這個Final Project要探討的議題。</span></h4>
+</li>
+<li>
+<h3 id="Final-Project1" data-id="Final-Project"><a class="anchor hidden-xs" href="#Final-Project1" title="Final-Project1"><span class="octicon octicon-link"></span></a><span>Final Project:</span></h3>
 <ul>
-<li><span>進一步藉由設計不同delay, loss參數的Proxy，產生不同的網路端對端傳出效能提供給同學觀察。</span></li>
-<li><span>請同學改良原本的socket Server, Client的傳輸發法，改善傳輸的效能。</span></li>
+<li>
+<h4 id="目標-Server可以完全接收到Client傳送的所有訊息-且最終能依序讀取並顯示收到的封包。" data-id="目標-Server可以完全接收到Client傳送的所有訊息-且最終能依序讀取並顯示收到的封包。"><a class="anchor hidden-xs" href="#目標-Server可以完全接收到Client傳送的所有訊息-且最終能依序讀取並顯示收到的封包。" title="目標-Server可以完全接收到Client傳送的所有訊息-且最終能依序讀取並顯示收到的封包。"><span class="octicon octicon-link"></span></a><span>目標: Server可以完全接收到Client傳送的所有訊息, 且最終能依序讀取並顯示收到的封包。</span></h4>
+<ul>
+<li><span>基於HW5的經驗，藉由設計不同delay, loss參數的Proxy，產生不同的網路端對端傳出效能提供給同學觀察。</span></li>
+<li><span>請同學設計新的Client傳輸封包給Server的方法，改善原本HW5傳輸方式所得到的效能。</span></li>
 </ul>
 </li>
-</ul><h2 id="拓樸" data-id="拓樸"><a class="anchor hidden-xs" href="#拓樸" title="拓樸"><span class="octicon octicon-link"></span></a><span>拓樸</span></h2><blockquote style="border-left-color: rgb(196, 119, 64);">
-<p><span>(a) 硬體拓樸 </span><span class="color" data-color="#c47740"></span><br>
+</ul>
+</li>
+</ul><hr><h2 id="實驗拓樸" data-id="實驗拓樸"><a class="anchor hidden-xs" href="#實驗拓樸" title="實驗拓樸"><span class="octicon octicon-link"></span></a><span>實驗拓樸</span></h2><blockquote style="border-left-color: rgb(66, 247, 169);">
+<p><span>(a) Socket 架構 </span><span class="color" data-color="#42f7a9"></span></p>
+<p><img src="https://hackmd.io/_uploads/H19I7N1zR.png" alt="image" loading="lazy"></p>
+</blockquote><ul>
+<li><span>為提供方法設計與開發彈性， Proxy 提供兩個 port 類比網路中兩條不同的路徑支援Client與Server間傳輸。</span></li>
+<li><span>實作時可根據需求選擇其中一條或兩條路徑進行傳輸。</span></li>
+<li><span>Client必須透過UDP proxy將封包傳給Server。</span></li>
+</ul><blockquote style="border-left-color: rgb(196, 119, 64);">
+<p><span>(b) 硬體拓樸 </span><span class="color" data-color="#c47740"></span><br>
 <img src="https://hackmd.io/_uploads/S1A774JzR.png" alt="image" loading="lazy"></p>
-</blockquote><blockquote style="border-left-color: rgb(66, 247, 169);">
-<p><span>(b) socket 架構 </span><span class="color" data-color="#42f7a9"></span><br>
-<span>由於補充資料有提到與冗餘鏈路相關的知識, 因此 Proxy 提供兩個 port 作為兩個不同的路徑, 並沒有強制要求要同時使用兩個鏈路或某個特定 port, 只要求封包要透過此 Proxy 進行傳輸而已.</span><br>
-<img src="https://hackmd.io/_uploads/H19I7N1zR.png" alt="image" loading="lazy"></p>
-</blockquote><h2 id="目標" data-id="目標"><a class="anchor hidden-xs" href="#目標" title="目標"><span class="octicon octicon-link"></span></a><span>目標:</span></h2><h3 id="1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" data-id="1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來"><a class="anchor hidden-xs" href="#1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" title="1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來"><span class="octicon octicon-link"></span></a><span>1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來</span></h3><h3 id="2-觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。" data-id="2-觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。"><a class="anchor hidden-xs" href="#2-觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。" title="2-觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。"><span class="octicon octicon-link"></span></a><span>2. 觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。</span></h3><h3 id="Proxy版本一" data-id="Proxy版本一"><a class="anchor hidden-xs" href="#Proxy版本一" title="Proxy版本一"><span class="octicon octicon-link"></span></a><span>Proxy版本一:</span></h3><ol>
+</blockquote><ul>
+<li><span>連線設定與HW5的p.8相同，唯一差異僅在PC1的UDP proxy具有兩個port，而HW5只有一個proxy提供給Client進行傳輸。</span></li>
+</ul><hr><h2 id="目標" data-id="目標"><a class="anchor hidden-xs" href="#目標" title="目標"><span class="octicon octicon-link"></span></a><span>目標:</span></h2><h3 id="1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" data-id="1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來"><a class="anchor hidden-xs" href="#1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" title="1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來"><span class="octicon octicon-link"></span></a><span>1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來</span></h3><h3 id="2-觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。" data-id="2-觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。"><a class="anchor hidden-xs" href="#2-觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。" title="2-觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。"><span class="octicon octicon-link"></span></a><span>2. 觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。</span></h3><h3 id="3-輸出結果要求" data-id="3-輸出結果要求"><a class="anchor hidden-xs" href="#3-輸出結果要求" title="3-輸出結果要求"><span class="octicon octicon-link"></span></a><span>3. 輸出結果要求</span></h3><ul>
+<li>
+<p><span>封包</span><mark><span>按照順序</span></mark><span>在Server端</span><mark><span>顯示</span></mark></p>
+</li>
+<li>
+<p><mark><span>不可重複, 亂序, 缺少任一封包</span></mark></p>
+</li>
+<li>
+<p><span>計算Client完整傳輸所有封包給Server所需的時間</span></p>
+</li>
+</ul><hr><h3 id="35-Proxy版本一" data-id="35-Proxy版本一"><a class="anchor hidden-xs" href="#35-Proxy版本一" title="35-Proxy版本一"><span class="octicon octicon-link"></span></a><span>(35%) Proxy版本一:</span></h3><ol>
 <li>
 <h4 id="Proxy-的行為" data-id="Proxy-的行為"><a class="anchor hidden-xs" href="#Proxy-的行為" title="Proxy-的行為"><span class="octicon octicon-link"></span></a><span>Proxy 的行為</span></h4>
 <ul>
@@ -87,20 +110,45 @@
 </li>
 <li>
 <h4 id="封包傳輸方法" data-id="封包傳輸方法"><a class="anchor hidden-xs" href="#封包傳輸方法" title="封包傳輸方法"><span class="octicon octicon-link"></span></a><span>封包傳輸方法</span></h4>
-<ul>
+</li>
+</ol><ul>
 <li><span>Part 1:</span>
 <ol>
-<li><span>仿照 HW5, 將傳送端依序傳送 1 ~ 1000號封包</span></li>
+<li><span>仿照 HW5, Client將透過UDP Proxy依序傳送 1 ~ 1000號封包一次給Server</span></li>
 <li><span>節錄部分傳輸結果並分析傳輸結果</span>
-<blockquote>
-<p><span>Wireshark 或 Terminal 的結果皆可</span></p>
-</blockquote>
+<ul>
+<li><span>Wireshark 或 Terminal 的結果皆可</span></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul><div class="alert alert-info">
+<ul>
+<li><span>Part 2:</span>
+<ol>
+<li><span>設計並實作方法於Client &amp; Server以達到傳輸結果要求 (節錄部分傳輸結果佐證)</span>
+<ul>
+<li><span>可根據參考資料、或網路資訊進行設計</span></li>
+<li><span>請務必提供使用的資料來源</span></li>
+</ul>
+</li>
+<li><span>清楚地描述設計方法.</span>
+<ul>
+<li><span>流程圖 or 註解等</span></li>
+</ul>
 </li>
 </ol>
 </li>
 </ul>
+</div><ol start="4">
+<li>
+<h4 id="輸出結果要求" data-id="輸出結果要求"><a class="anchor hidden-xs" href="#輸出結果要求" title="輸出結果要求"><span class="octicon octicon-link"></span></a><span>輸出結果要求</span></h4>
 </li>
-</ol><h3 id="Proxy-版本二" data-id="Proxy-版本二"><a class="anchor hidden-xs" href="#Proxy-版本二" title="Proxy-版本二"><span class="octicon octicon-link"></span></a><span>Proxy 版本二:</span></h3><ol>
+</ol><ul>
+<li><span>封包</span><mark><span>按照順序</span></mark><span>在接收端</span><mark><span>顯示</span></mark></li>
+<li><mark><span>不可重複, 亂序, 缺少任一封包</span></mark></li>
+<li><span>計算完整傳輸所有封包所需的時間</span></li>
+</ul><hr><h3 id="35-Proxy-版本二" data-id="35-Proxy-版本二"><a class="anchor hidden-xs" href="#35-Proxy-版本二" title="35-Proxy-版本二"><span class="octicon octicon-link"></span></a><span>(35%) Proxy 版本二:</span></h3><ol>
 <li>
 <h4 id="Proxy-的行為1" data-id="Proxy-的行為"><a class="anchor hidden-xs" href="#Proxy-的行為1" title="Proxy-的行為1"><span class="octicon octicon-link"></span></a><span>Proxy 的行為</span></h4>
 <ul>
@@ -127,20 +175,45 @@
 </li>
 <li>
 <h4 id="封包傳輸方法1" data-id="封包傳輸方法"><a class="anchor hidden-xs" href="#封包傳輸方法1" title="封包傳輸方法1"><span class="octicon octicon-link"></span></a><span>封包傳輸方法</span></h4>
-<ul>
+</li>
+</ol><ul>
 <li><span>Part 1:</span>
 <ol>
-<li><span>仿照 HW5, 從傳送端依序傳送 1 ~ 1000 號封包一次</span></li>
+<li><span>仿照 HW5, Client將透過UDP Proxy依序傳送 1 ~ 1000號封包一次給Server</span></li>
 <li><span>節錄部分傳輸結果並分析傳輸結果</span>
-<blockquote>
-<p><span>Wireshark 或 Terminal 的結果皆可</span></p>
-</blockquote>
+<ul>
+<li><span>Wireshark 或 Terminal 的結果皆可</span></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul><div class="alert alert-info">
+<ul>
+<li><span>Part 2:</span>
+<ol>
+<li><span>設計並實作方法於Client &amp; Server以達到傳輸結果要求 (節錄部分傳輸結果佐證)</span>
+<ul>
+<li><span>可根據參考資料、或網路資訊進行設計</span></li>
+<li><span>請務必提供使用的資料來源</span></li>
+</ul>
+</li>
+<li><span>清楚地描述設計方法.</span>
+<ul>
+<li><span>流程圖 or 註解等</span></li>
+</ul>
 </li>
 </ol>
 </li>
 </ul>
+</div><ol start="4">
+<li>
+<h4 id="輸出結果要求1" data-id="輸出結果要求"><a class="anchor hidden-xs" href="#輸出結果要求1" title="輸出結果要求1"><span class="octicon octicon-link"></span></a><span>輸出結果要求</span></h4>
 </li>
-</ol><h3 id="Proxy-版本三" data-id="Proxy-版本三"><a class="anchor hidden-xs" href="#Proxy-版本三" title="Proxy-版本三"><span class="octicon octicon-link"></span></a><span>Proxy 版本三:</span></h3><ol>
+</ol><ul>
+<li><span>封包</span><mark><span>按照順序</span></mark><span>在接收端</span><mark><span>顯示</span></mark></li>
+<li><mark><span>不可重複, 亂序, 缺少任一封包</span></mark></li>
+<li><span>計算完整傳輸所有封包所需的時間</span></li>
+</ul><hr><h3 id="30-Proxy-版本三" data-id="30-Proxy-版本三"><a class="anchor hidden-xs" href="#30-Proxy-版本三" title="30-Proxy-版本三"><span class="octicon octicon-link"></span></a><span>(30%) Proxy 版本三:</span></h3><ol>
 <li>
 <h4 id="Proxy-的行為2" data-id="Proxy-的行為"><a class="anchor hidden-xs" href="#Proxy-的行為2" title="Proxy-的行為2"><span class="octicon octicon-link"></span></a><span>Proxy 的行為</span></h4>
 <ul>
@@ -167,22 +240,56 @@
 </li>
 <li>
 <h4 id="封包傳輸方法2" data-id="封包傳輸方法"><a class="anchor hidden-xs" href="#封包傳輸方法2" title="封包傳輸方法2"><span class="octicon octicon-link"></span></a><span>封包傳輸方法</span></h4>
-<ul>
+</li>
+</ol><ul>
 <li><span>Part 1:</span>
 <ol>
-<li><span>仿照 HW5, 將傳送端依序傳送 1 ~ 1000號封包</span></li>
+<li><span>仿照 HW5, Client將透過UDP Proxy依序傳送 1 ~ 1000號封包一次給Server</span></li>
 <li><span>節錄部分傳輸結果並分析傳輸結果</span>
-<blockquote>
-<p><span>Wireshark 或 Terminal 的結果皆可</span></p>
-</blockquote>
+<ul>
+<li><span>Wireshark 或 Terminal 的結果皆可</span></li>
+</ul>
+</li>
+</ol>
+</li>
+</ul><div class="alert alert-info">
+<ul>
+<li><span>Part 2:</span>
+<ol>
+<li><span>設計並實作方法於Client &amp; Server以達到傳輸結果要求 (節錄部分傳輸結果佐證)</span>
+<ul>
+<li><span>可根據參考資料、或網路資訊進行設計</span></li>
+<li><span>請務必提供使用的資料來源</span></li>
+</ul>
+</li>
+<li><span>清楚地描述設計方法.</span>
+<ul>
+<li><span>流程圖 or 註解等</span></li>
+</ul>
 </li>
 </ol>
 </li>
 </ul>
-</li>
-</ol><h2 id="限制" data-id="限制"><a class="anchor hidden-xs" href="#限制" title="限制"><span class="octicon octicon-link"></span></a><span>限制</span></h2><ul>
+</div><ol start="4">
 <li>
-<p><span>Client 與 Server 之間傳送</span><mark><span>關於封包的資訊僅可透過紅色路徑執行</span></mark></p>
+<h4 id="輸出結果要求2" data-id="輸出結果要求"><a class="anchor hidden-xs" href="#輸出結果要求2" title="輸出結果要求2"><span class="octicon octicon-link"></span></a><span>輸出結果要求</span></h4>
+</li>
+</ol><ul>
+<li><span>封包</span><mark><span>按照順序</span></mark><span>在Server端</span><mark><span>顯示</span></mark></li>
+<li><mark><span>不可重複, 亂序, 缺少任一封包</span></mark></li>
+<li><span>計算完整傳輸所有封包所需的時間</span></li>
+</ul><ol start="5">
+<li>
+<h4 id="問題與討論" data-id="問題與討論"><a class="anchor hidden-xs" href="#問題與討論" title="問題與討論"><span class="octicon octicon-link"></span></a><span>問題與討論</span></h4>
+<ol>
+<li><span>請闡明從此 Proxy 觀察到什麼樣的行為?</span></li>
+<li><span>在設計方法時採用的策略與題目一 / 二 有何異同? 為甚麼?</span></li>
+<li><span>進行過程中，是否有使用到如Ping, iPerf, traceroute等工具? 若有，如何使用?</span></li>
+</ol>
+</li>
+</ol><hr><h2 id="限制" data-id="限制"><a class="anchor hidden-xs" href="#限制" title="限制"><span class="octicon octicon-link"></span></a><span>限制</span></h2><ul>
+<li>
+<p><span>Client 給 Server 的封包 </span><mark><span>必須透過Final Project released的UDP Proxy</span></mark></p>
 </li>
 <li>
 <p><span>可以額外在 Server, Client 或是 PC1 新增額外的 port / Proxy 以協助解決傳輸問題.</span></p>
@@ -203,6 +310,73 @@
 <li><span>當兩個 port 都發生 timeout 時, 終端機視窗會直接關閉</span></li>
 <li><span>初步探索執行檔時可以透過提供的 Client 和 Server 程式進行測試</span></li>
 </ul>
+</div><hr><h2 id="改良建議" data-id="改良建議"><a class="anchor hidden-xs" href="#改良建議" title="改良建議"><span class="octicon octicon-link"></span></a><span>改良建議</span></h2><h3 id="參考資料" data-id="參考資料"><a class="anchor hidden-xs" href="#參考資料" title="參考資料"><span class="octicon octicon-link"></span></a><span>參考資料</span></h3><ol>
+<li>
+<p><span>效仿 TCP 的 sliding window 等機制</span><br>
+<a href="https://medium.com/moda-it/%E7%B6%B2%E8%B7%AF%E5%B0%81%E5%8C%85%E7%B5%90%E6%A7%8B-tcp-http-a61d58d3a69c" target="_blank" rel="noopener"><span>https://medium.com/moda-it/網路封包結構-tcp-http-a61d58d3a69c</span></a></p>
+<p><span>TCP-IP詳解：滑動窗口（Sliding Window）</span><br>
+<a href="https://www.itread01.com/articles/1476615670.html" target="_blank" rel="noopener"><span>https://www.itread01.com/articles/1476615670.html</span></a></p>
+</li>
+<li>
+<p><span>Dual Connectivity</span><br>
+<a href="https://www.techplayon.com/dual-connectivity-dc-definition-protocol-and-network-architecture-dc-and-ca-comparison/" target="_blank" rel="noopener"><span>https://www.techplayon.com/dual-connectivity-dc-definition-protocol-and-network-architecture-dc-and-ca-comparison/</span></a></p>
+<p><span>冗餘鏈路 ( Redundancy )</span><br>
+<a href="https://www.auvik.com/franklyit/blog/simple-network-redundancy/" target="_blank" rel="noopener"><span>https://www.auvik.com/franklyit/blog/simple-network-redundancy/</span></a></p>
+</li>
+<li>
+<p><span>等價多路徑路由 Equal-Cost Multipath Routing (ECMP)</span><br>
+<a href="https://www.jianshu.com/p/8698738687c4" target="_blank" rel="noopener"><span>https://www.jianshu.com/p/8698738687c4</span></a></p>
+</li>
+</ol><hr><h3 id="改良參考範例-此場景僅供概念參考" data-id="改良參考範例-此場景僅供概念參考"><a class="anchor hidden-xs" href="#改良參考範例-此場景僅供概念參考" title="改良參考範例-此場景僅供概念參考"><span class="octicon octicon-link"></span></a><span>改良參考範例 (此場景僅供概念參考):</span></h3><p><img src="https://hackmd.io/_uploads/HJZFiTJMC.png" alt="image" loading="lazy"></p><ul>
+<li><strong><span>機制</span></strong><span>:</span>
+<ul>
+<li>
+<p><mark><span>採用概念: 冗餘鏈路</span></mark></p>
+</li>
+<li>
+<p><span>如果至少有一條路徑有成功送達 Client, 則保持輸出結果</span></p>
+<ul>
+<li><span>兩條鏈路都失敗的機率很小: </span><span class="mathjax"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="23" style="font-size: 113.1%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="3"><mjx-c class="mjx-c2217"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="3"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c3D"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c31"></mjx-c></mjx-mn><mjx-mi class="mjx-n"><mjx-c class="mjx-c25"></mjx-c></mjx-mi></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>0.1</mn><mo>∗</mo><mn>0.1</mn><mo>=</mo><mn>0.001</mn><mo>=</mo><mn>0.1</mn><mi mathvariant="normal">%</mi></math></mjx-assistive-mml></mjx-container></span></li>
+<li><span>因此使用雙連線成功傳輸的機率會較高</span></li>
+</ul>
+</li>
+<li>
+<p><span>Server 透過</span><mark><span>綠色路徑傳遞當前接收狀態</span></mark><span>給 client.</span></p>
+</li>
+<li>
+<p><span>如果 Loss 和 Delay 同時發生, 則通知 Server 重新傳送該封包.</span></p>
+<ul>
+<li><span>此處設計的重新傳送如果沒有遇到 Loss / Delay, 將於 0.1 秒後完成, 會比等待該封包自行回復更有效率.</span></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul><hr><div class="alert alert-info">
+<h2 id="Presentaiton-and-Submission" data-id="Presentaiton-and-Submission"><a class="anchor hidden-xs" href="#Presentaiton-and-Submission" title="Presentaiton-and-Submission"><span class="octicon octicon-link"></span></a><span>Presentaiton and Submission</span></h2>
+<h3 id="Presentation-May-29-2024-in-Class" data-id="Presentation-May-29-2024-in-Class"><a class="anchor hidden-xs" href="#Presentation-May-29-2024-in-Class" title="Presentation-May-29-2024-in-Class"><span class="octicon octicon-link"></span></a><span>Presentation: May 29, 2024 in Class.</span></h3>
+<ul>
+<li><mark><span>15 Min per team</span></mark>
+<ul>
+<li><span>Summary of your achievements in (8 min)</span></li>
+<li><span>Demonstrate your works (5 min)</span></li>
+<li><span>Q&amp;A (2 min)</span></li>
+</ul>
+</li>
+<li><mark><span>You will return Pi, Mikrotik switch, SD card, Ethernet cables, Pi's charger, etc. after presentation.</span></mark></li>
+</ul>
+<h3 id="Submission-May-28-2024-through-Moodle" data-id="Submission-May-28-2024-through-Moodle"><a class="anchor hidden-xs" href="#Submission-May-28-2024-through-Moodle" title="Submission-May-28-2024-through-Moodle"><span class="octicon octicon-link"></span></a><span>Submission: May 28, 2024 through Moodle</span></h3>
+<ul>
+<li><span>One submission per team</span></li>
+<li><span>File will be named as FP_ID1_ID2.zip, including</span>
+<ul>
+<li><span>Report (named as FP_ID1_ID2.pdf)</span><br>
+<span>* Describe your works and results.</span></li>
+</ul>
+</li>
+<li><span>Source code</span></li>
+<li><span>Slides for presentation</span></li>
+<li><span>Demo video (optional)</span></li>
+</ul>
 </div></div>
     <div class="ui-toc dropup unselectable hidden-print" style="display:none;">
         <div class="pull-right dropdown">
@@ -211,19 +385,25 @@
             </a>
             <ul id="ui-toc" class="ui-toc-dropdown dropdown-menu" aria-labelledby="tocLabel">
                 <div class="toc"><ul class="nav">
-<li><a href="#Final-Project-Preliminary" title="Final Project Preliminary">Final Project Preliminary</a><ul class="nav">
+<li><a href="#Final-Project" title="Final Project">Final Project</a><ul class="nav">
 <li><a href="#實驗動機" title="實驗動機">實驗動機</a></li>
-<li><a href="#拓樸" title="拓樸">拓樸</a></li>
+<li><a href="#實驗拓樸" title="實驗拓樸">實驗拓樸</a></li>
 <li><a href="#目標" title="目標:">目標:</a><ul class="nav">
 <li><a href="#1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" title="1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來">1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來</a></li>
-<li><a href="#2-觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。" title="2. 觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。">2. 觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。</a></li>
-<li><a href="#Proxy版本一" title="Proxy版本一:">Proxy版本一:</a></li>
-<li><a href="#Proxy-版本二" title="Proxy 版本二:">Proxy 版本二:</a></li>
-<li><a href="#Proxy-版本三" title="Proxy 版本三:">Proxy 版本三:</a></li>
+<li><a href="#2-觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。" title="2. 觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。">2. 觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。</a></li>
+<li><a href="#3-輸出結果要求" title="3. 輸出結果要求">3. 輸出結果要求</a></li>
+<li><a href="#35-Proxy版本一" title="(35%) Proxy版本一:">(35%) Proxy版本一:</a></li>
+<li><a href="#35-Proxy-版本二" title="(35%) Proxy 版本二:">(35%) Proxy 版本二:</a></li>
+<li><a href="#30-Proxy-版本三" title="(30%) Proxy 版本三:">(30%) Proxy 版本三:</a></li>
 </ul>
 </li>
 <li><a href="#限制" title="限制">限制</a></li>
 <li><a href="#Proxy-執行檔注意事項" title="Proxy 執行檔注意事項">Proxy 執行檔注意事項</a></li>
+<li><a href="#改良建議" title="改良建議">改良建議</a><ul class="nav">
+<li><a href="#參考資料" title="參考資料">參考資料</a></li>
+<li><a href="#改良參考範例-此場景僅供概念參考" title="改良參考範例 (此場景僅供概念參考):">改良參考範例 (此場景僅供概念參考):</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -233,19 +413,25 @@
     </div>
     <div id="ui-toc-affix" class="ui-affix-toc ui-toc-dropdown unselectable hidden-print" data-spy="affix" style="top:17px;display:none;"  >
         <div class="toc"><ul class="nav">
-<li class=""><a href="#Final-Project-Preliminary" title="Final Project Preliminary">Final Project Preliminary</a><ul class="nav">
-<li class=""><a href="#實驗動機" title="實驗動機">實驗動機</a></li>
-<li class=""><a href="#拓樸" title="拓樸">拓樸</a></li>
-<li class=""><a href="#目標" title="目標:">目標:</a><ul class="nav">
-<li class=""><a href="#1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" title="1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來">1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來</a></li>
-<li class=""><a href="#2-觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。" title="2. 觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。">2. 觀察傳送與接收的效果，並著手思考可能的改良傳輸效能的方法。</a></li>
-<li class=""><a href="#Proxy版本一" title="Proxy版本一:">Proxy版本一:</a></li>
-<li class=""><a href="#Proxy-版本二" title="Proxy 版本二:">Proxy 版本二:</a></li>
-<li class=""><a href="#Proxy-版本三" title="Proxy 版本三:">Proxy 版本三:</a></li>
+<li><a href="#Final-Project" title="Final Project">Final Project</a><ul class="nav">
+<li><a href="#實驗動機" title="實驗動機">實驗動機</a></li>
+<li><a href="#實驗拓樸" title="實驗拓樸">實驗拓樸</a></li>
+<li><a href="#目標" title="目標:">目標:</a><ul class="nav">
+<li><a href="#1-透過課程提供三個版本的Proxy-如下述，以及同學們改良HW5的Client-amp-Server，將拓樸的架構實作出來" title="1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來">1. 透過課程提供三個版本的Proxy (如下述)，以及同學們改良HW5的Client &amp; Server，將拓樸的架構實作出來</a></li>
+<li><a href="#2-觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。" title="2. 觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。">2. 觀察Client傳送與Server接收封包的效果，並著手思考並實作可能的改良傳輸效能的方法。</a></li>
+<li><a href="#3-輸出結果要求" title="3. 輸出結果要求">3. 輸出結果要求</a></li>
+<li><a href="#35-Proxy版本一" title="(35%) Proxy版本一:">(35%) Proxy版本一:</a></li>
+<li><a href="#35-Proxy-版本二" title="(35%) Proxy 版本二:">(35%) Proxy 版本二:</a></li>
+<li><a href="#30-Proxy-版本三" title="(30%) Proxy 版本三:">(30%) Proxy 版本三:</a></li>
 </ul>
 </li>
-<li class=""><a href="#限制" title="限制">限制</a></li>
+<li><a href="#限制" title="限制">限制</a></li>
 <li><a href="#Proxy-執行檔注意事項" title="Proxy 執行檔注意事項">Proxy 執行檔注意事項</a></li>
+<li><a href="#改良建議" title="改良建議">改良建議</a><ul class="nav">
+<li><a href="#參考資料" title="參考資料">參考資料</a></li>
+<li><a href="#改良參考範例-此場景僅供概念參考" title="改良參考範例 (此場景僅供概念參考):">改良參考範例 (此場景僅供概念參考):</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
