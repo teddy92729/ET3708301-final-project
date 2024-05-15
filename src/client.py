@@ -33,7 +33,7 @@ def client(
             bound_window = min(window, len(pkts) - index)
             # get packets that will be sent
             ready_pkts = pkts[index : index + bound_window]
-            logging.debug(f"batch {batch}" + "*" * 50)
+            logging.debug("*" * 25 + f" batch {batch} " + "*" * 25)
             for pkt in ready_pkts:
                 total_sent += 1
                 skt.sendto(Packet.encode(pkt, batch), tuple(target))
@@ -88,6 +88,7 @@ def client(
                 logging.debug(f"Window move {offset + 1}: timeout")
             t = batch_timer()
             logging.debug(f"Time elapsed: {t:.5f} sec")
+        logging.debug("*" * 50)
         t = total_timer()
         logging.info(f"Total time: {t:.5f} sec")
         logging.info(f"Average RTT: {t/pkts_num*1000:.2f} ms")
