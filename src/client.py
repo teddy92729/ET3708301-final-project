@@ -24,7 +24,7 @@ def client(
         total_fast_retransmit = 0
         total_timeout = 0
 
-        timer = Timer()
+        total_timer = Timer()
         # index of first packet in this batch
         index = 0
         while index < len(pkts):
@@ -43,6 +43,7 @@ def client(
             last_pkt = None
             pkt = None
             offset = -1
+            batch_timer = Timer()
             try:
                 while True:
                     data = skt.recv(65535)
@@ -85,9 +86,11 @@ def client(
                 index += offset + 1
                 total_timeout += 1
                 logging.debug(f"Window move {offset + 1}: timeout")
-        t = timer()
+            t = batch_timer()
+            logging.debug(f"Time elapsed: {t:.5f} sec")
+        t = total_timer()
         logging.info(f"Total time: {t:.5f} sec")
-        logging.info(f"Average RTT: {t/pkts_num:.5f} sec")
+        logging.info(f"Average RTT: {t/pkts_num*1000:.2f} ms")
         logging.info(f"Total packets sent: {total_sent}")
         logging.info(f"Total fast retransmit: {total_fast_retransmit}")
         logging.info(f"Total timeout: {total_timeout}")
